@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import propTypes from 'prop-types';
 import { getCategories } from '../../services/api';
 
 class CategoryList extends Component {
@@ -19,6 +20,7 @@ class CategoryList extends Component {
 
   render() {
     const { category, isLoading } = this.state;
+    const { filterCategory } = this.props;
 
     if (isLoading) {
       return (
@@ -31,6 +33,7 @@ class CategoryList extends Component {
         {
           category.map((categoria) => (
             <button
+              onClick={ () => filterCategory(categoria) }
               data-testid="category"
               key={ categoria.id }
               type="button"
@@ -43,5 +46,9 @@ class CategoryList extends Component {
     );
   }
 }
+
+CategoryList.propTypes = {
+  filterCategory: propTypes.func.isRequired,
+};
 
 export default CategoryList;
