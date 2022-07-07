@@ -53,7 +53,7 @@ class Home extends React.Component {
               Digite algum termo de pesquisa ou escolha uma categoria.
             </h1>
           ) : (
-            <h1>Lista de produtosssssss</h1>
+            <h1>Lista de produtossssssss</h1>
           )
         }
         <CategoryList />
