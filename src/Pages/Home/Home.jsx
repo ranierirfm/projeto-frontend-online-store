@@ -1,4 +1,5 @@
 import React from 'react';
+import CategoryList from '../../Components/CategoryList/CategoryList';
 
 class Home extends React.Component {
   constructor() {
@@ -24,6 +25,7 @@ class Home extends React.Component {
             <h1>Lista de produtos</h1>
           )
         }
+        <CategoryList />
       </main>
     );
   }
