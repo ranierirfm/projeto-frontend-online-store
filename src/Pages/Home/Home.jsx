@@ -37,6 +37,7 @@ class Home extends React.Component {
 
   render() {
     const { productList, itemInput, loadingFetchProducts } = this.state;
+    const { addToCart } = this.props;
     return (
       <main>
         <section>
@@ -70,7 +71,7 @@ class Home extends React.Component {
           loadingFetchProducts ? (
             <h1>Carregando....</h1>
           ) : (
-            <ProductCard products={ productList } />
+            <ProductCard products={ productList } addToCart={ addToCart } />
           )
         }
 
