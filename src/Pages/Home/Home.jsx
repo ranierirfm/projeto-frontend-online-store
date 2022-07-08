@@ -25,7 +25,7 @@ class Home extends React.Component {
     const response = await getProductsFromCategoryAndQuery(null, itemInput);
     this.setState({ productList: response.results, loadingFetchProducts: false });
   }
-
+  
   filterCategory = async ({ id }) => {
     this.setState({ loadingFetchProducts: true });
     const getProductByCategory = await getProductsFromCategoryAndQuery(id, null);
@@ -73,6 +73,7 @@ class Home extends React.Component {
             <ProductCard products={ productList } />
           )
         }
+
       </main>
     );
   }
