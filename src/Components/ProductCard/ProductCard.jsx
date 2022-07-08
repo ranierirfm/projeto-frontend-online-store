@@ -3,8 +3,9 @@ import propTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class ProductCard extends React.Component {
+
   render() {
-    const { products } = this.props;
+    const { products, addToCart } = this.props;
     return (
       <section>
         {
@@ -30,6 +31,14 @@ class ProductCard extends React.Component {
                     <span>
                       { produto.price }
                     </span>
+                    <button
+                    type="button"
+                    onClick={ () => addToCart(produto.id) }
+                    data-testid="product-add-to-cart"
+                    name="addToCart"
+                    >
+                      Adicionar ao carrinho
+                    </button>
                   </nav>
                 ))
               }
