@@ -25,6 +25,15 @@ class Home extends React.Component {
     const response = await getProductsFromCategoryAndQuery(null, itemInput);
     this.setState({ productList: response.results, loadingFetchProducts: false });
   }
+  
+  filterCategory = async ({ id }) => {
+    this.setState({ loadingFetchProducts: true });
+    const getProductByCategory = await getProductsFromCategoryAndQuery(id, null);
+    this.setState({
+      productList: getProductByCategory.results,
+      loadingFetchProducts: false,
+    });
+  }
 
   render() {
     const { productList, itemInput, loadingFetchProducts } = this.state;
@@ -53,10 +62,10 @@ class Home extends React.Component {
               Digite algum termo de pesquisa ou escolha uma categoria.
             </h1>
           ) : (
-            <h1>Lista de produtossssssss</h1>
+            <h1>Lista de produtosss</h1>
           )
         }
-        <CategoryList />
+        <CategoryList filterCategory={ this.filterCategory } />
         {
           loadingFetchProducts ? (
             <h1>Carregando....</h1>
@@ -64,6 +73,7 @@ class Home extends React.Component {
             <ProductCard products={ productList } />
           )
         }
+
       </main>
     );
   }
