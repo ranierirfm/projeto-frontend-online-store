@@ -30,7 +30,7 @@ class App extends React.Component {
     const indexOfItem = this.fetchItemIndex(product);
     const itemQuantity = cartItem[indexOfItem].quantity;
     const cloneOfCartItem = cartItem;
-    cloneOfCartItem[indexOfItem] = this.plusQuantity(indexOfItem, itemQuantity);
+    cloneOfCartItem[indexOfItem] = this.fotmatAndPlusQuantity(indexOfItem, itemQuantity);
     this.setState({ cartItem: cloneOfCartItem });
   }
 
@@ -39,7 +39,7 @@ class App extends React.Component {
     return cartItem.findIndex((item) => item.id === product.id);
   }
 
-  plusQuantity = (indexOfItem) => {
+  fotmatAndPlusQuantity = (indexOfItem) => {
     const { cartItem } = this.state;
     const itemQuantity = cartItem[indexOfItem].quantity;
     return { ...cartItem[indexOfItem], quantity: itemQuantity + 1 };
