@@ -34,11 +34,6 @@ class App extends React.Component {
     this.setState({ cartItem: cloneOfCartItem });
   }
 
-  createNewItem = (product) => {
-    const addQuantityKey = { ...product, quantity: 1 };
-    this.setState((prevState) => ({ cartItem: [...prevState.cartItem, addQuantityKey] }));
-  }
-
   fetchItemIndex = (product) => {
     const { cartItem } = this.state;
     return cartItem.findIndex((item) => item.id === product.id);
@@ -48,6 +43,17 @@ class App extends React.Component {
     const { cartItem } = this.state;
     const itemQuantity = cartItem[indexOfItem].quantity;
     return { ...cartItem[indexOfItem], quantity: itemQuantity + 1 };
+  }
+
+  createNewItem = (product) => {
+    const addQuantityKey = { ...product, quantity: 1 };
+    this.setState((prevState) => ({ cartItem: [...prevState.cartItem, addQuantityKey] }));
+  }
+
+  message = () => {
+    const { cartItem } = this.state;
+    const message = cartItem.length === 0 ? 'Seu carrinho está vazio' : '';
+    return message;
   }
 
   render() {
@@ -60,13 +66,19 @@ class App extends React.Component {
           <Route
             exact
             path="/carrinho"
-            render={ () => <Cart cartItem={ cartItem } /> }
+            render={ () => (<Cart
+              message={ this.message }
+              cartItem={ cartItem }
+            />) }
           />
           <Route
             exact
             path="/productDetails/:id"
             render={
-              (props) => <ProductDetails { ...props } addToCart={ this.addToCart } />
+              (props) => (<ProductDetails
+                { ...props }
+                addToCart={ this.addToCart }
+              />)
             }
           />
         </Switch>
