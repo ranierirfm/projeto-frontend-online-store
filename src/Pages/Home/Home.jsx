@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import CategoryList from '../../Components/CategoryList/CategoryList';
 import ProductCard from '../../Components/ProductCard/ProductCard';
 import { getProductsFromCategoryAndQuery } from '../../services/api';
@@ -79,5 +80,9 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  addToCart: propTypes.func.isRequired,
+};
 
 export default Home;
