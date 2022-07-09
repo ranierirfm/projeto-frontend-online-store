@@ -3,42 +3,33 @@ import propTypes from 'prop-types';
 import CartItem from '../../Components/CartItem/CartItem';
 
 class Cart extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      productsInCart: [],
-    };
-  }
-
   render() {
-    const { productsInCart } = this.state;
-    const { cartItem } = this.props;
+    const { cartItem, message } = this.props;
     return (
-      <div>
+      <section>
+        <h1
+          data-testid="shopping-cart-empty-message"
+        >
+          { message() }
+        </h1>
         {
-          productsInCart.lenght === 0 ? (
-            <h1
-              data-testid="shopping-cart-empty-message"
-            >
-              Seu carrinho está vazio
-            </h1>
-          )
-            : cartItem.map((produto) => (
-              <CartItem
-                quantity={ produto.quantity }
-                key={ produto.id }
-                title={ produto.title }
-                price={ produto.price }
-              />
-            ))
+          cartItem.map((produto) => (
+            <CartItem
+              quantity={ produto.quantity }
+              key={ produto.id }
+              title={ produto.title }
+              price={ produto.price }
+            />
+          ))
         }
-      </div>
+      </section>
     );
   }
 }
 
 Cart.propTypes = {
   cartItem: propTypes.arrayOf(propTypes.shape({})).isRequired,
+  message: propTypes.func.isRequired,
 };
 
 export default Cart;
