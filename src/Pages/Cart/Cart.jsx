@@ -5,7 +5,6 @@ import CartItem from '../../Components/CartItem/CartItem';
 class Cart extends React.Component {
   render() {
     const { cartItem, message } = this.props;
-    console.log(message());
     return (
       <section>
         <h1
