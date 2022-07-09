@@ -30,7 +30,7 @@ class Cart extends React.Component {
 
 Cart.propTypes = {
   cartItem: propTypes.arrayOf(propTypes.shape({})).isRequired,
-  message: propTypes.string.isRequired,
+  message: propTypes.func.isRequired,
 };
 
 export default Cart;
