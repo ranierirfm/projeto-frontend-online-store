@@ -4,6 +4,7 @@ import LinkCart from './Components/LinkCart/LinkCart';
 import Cart from './Pages/Cart/Cart';
 import Home from './Pages/Home/Home';
 import ProductDetails from './Pages/ProductDetails/ProductDetails';
+import { getProductDetails } from './services/api';
 
 class App extends React.Component {
   constructor() {
@@ -13,40 +14,40 @@ class App extends React.Component {
     };
   }
 
-  verifyItemQuantity = (product) => {
+  addToCart = async (idOfProduct) => {
+    const product = await getProductDetails(idOfProduct);
+    if (this.itemExist(product)) return this.plusItemQuantity(product);
+    this.createNewItem(product);
+  }
+
+  itemExist = (product) => {
     const { cartItem } = this.state;
     return cartItem.some((item) => item.id === product.id);
   }
 
-  formatCartObject = (indexOfItem, itemQuantity) => {
-    const { cartItem } = this.state;
-    const itemFormated = {
-      ...cartItem[indexOfItem],
-      quantity: itemQuantity + 1,
-    };
-    return itemFormated;
-  }
-
   plusItemQuantity = (product) => {
     const { cartItem } = this.state;
-    const indexOfItem = cartItem.findIndex((item) => item.id === product.id);
+    const indexOfItem = this.fetchItemIndex(product);
     const itemQuantity = cartItem[indexOfItem].quantity;
     const cloneOfCartItem = cartItem;
-    cloneOfCartItem[indexOfItem] = this.formatCartObject(indexOfItem, itemQuantity);
+    cloneOfCartItem[indexOfItem] = this.plusQuantity(indexOfItem, itemQuantity);
     this.setState({ cartItem: cloneOfCartItem });
   }
 
-  addToCart = async (id) => {
-    const fetchProduct = await fetch(`https://api.mercadolibre.com/items/${id}`);
-    const product = await fetchProduct.json();
-    if (this.verifyItemQuantity(product)) {
-      this.plusItemQuantity(product);
-      return;
-    }
-    const productQuantity = await { ...product, quantity: 1 };
-    this.setState((prevState) => ({
-      cartItem: [...prevState.cartItem, productQuantity],
-    }));
+  createNewItem = (product) => {
+    const addQuantityKey = { ...product, quantity: 1 };
+    this.setState((prevState) => ({ cartItem: [...prevState.cartItem, addQuantityKey] }));
+  }
+
+  fetchItemIndex = (product) => {
+    const { cartItem } = this.state;
+    return cartItem.findIndex((item) => item.id === product.id);
+  }
+
+  plusQuantity = (indexOfItem) => {
+    const { cartItem } = this.state;
+    const itemQuantity = cartItem[indexOfItem].quantity;
+    return { ...cartItem[indexOfItem], quantity: itemQuantity + 1 };
   }
 
   render() {
@@ -56,7 +57,11 @@ class App extends React.Component {
         <LinkCart />
         <Switch>
           <Route exact path="/" render={ () => <Home addToCart={ this.addToCart } /> } />
-          <Route exact path="/carrinho" render={ () => <Cart cartItem={ cartItem } /> } />
+          <Route
+            exact
+            path="/carrinho"
+            render={ () => <Cart cartItem={ cartItem } /> }
+          />
           <Route
             exact
             path="/productDetails/:id"
