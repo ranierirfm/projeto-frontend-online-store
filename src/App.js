@@ -12,7 +12,15 @@ class App extends React.Component {
     super();
     this.state = {
       cartItem: [],
+      allQuantityOfItems: 0,
     };
+  }
+
+  // requisito 13
+  sumAllItems = () => {
+    const { cartItem } = this.state;
+    const sumAll = cartItem.reduce((acc, product) => acc + product.quantity, 0);
+    this.setState({ allQuantityOfItems: sumAll });
   }
 
   addToCart = async (idOfProduct) => {
@@ -32,7 +40,9 @@ class App extends React.Component {
     const itemQuantity = cartItem[indexOfItem].quantity;
     const cloneOfCartItem = cartItem;
     cloneOfCartItem[indexOfItem] = this.fotmatAndPlusQuantity(indexOfItem, itemQuantity);
-    this.setState({ cartItem: cloneOfCartItem });
+    this.setState({ cartItem: cloneOfCartItem }, () => {
+      this.sumAllItems();
+    });
   }
 
   fetchItemIndex = (product) => {
@@ -48,7 +58,11 @@ class App extends React.Component {
 
   createNewItem = (product) => {
     const addQuantityKey = { ...product, quantity: 1 };
-    this.setState((prevState) => ({ cartItem: [...prevState.cartItem, addQuantityKey] }));
+    this.setState((prevState) => ({
+      cartItem: [...prevState.cartItem, addQuantityKey],
+    }), () => {
+      this.sumAllItems();
+    });
   }
 
   message = () => {
@@ -58,10 +72,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { cartItem } = this.state;
+    const { cartItem, allQuantityOfItems } = this.state;
     return (
       <BrowserRouter>
-        <LinkCart />
+        <LinkCart
+          allQuantityOfItems={ allQuantityOfItems }
+          cartItem={ cartItem }
+        />
         <Switch>
           <Route exact path="/" render={ () => <Home addToCart={ this.addToCart } /> } />
           <Route
