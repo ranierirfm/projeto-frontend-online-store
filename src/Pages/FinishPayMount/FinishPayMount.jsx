@@ -1,3 +1,5 @@
+// TELA DE FINALIZAR COMPRA // REQ 12
+
 import React, { Component } from 'react';
 import FinishedForm from '../../Components/FinishedForm/FinishedForm';
 

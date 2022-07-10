@@ -6,13 +6,31 @@ import FinishPayMount from './Pages/FinishPayMount/FinishPayMount';
 import Home from './Pages/Home/Home';
 import ProductDetails from './Pages/ProductDetails/ProductDetails';
 import { getProductDetails } from './services/api';
+import { getItemQuantity, plussItemCartQuantity } from './services/cartStorage';
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       cartItem: [],
+      allQuantityOfItems: 4,
     };
+  }
+
+  // requisito 13
+  componentDidMount() {
+    this.setState({ allQuantityOfItems: !getItemQuantity() ? 0 : getItemQuantity() });
+  }
+
+  // requisito 13
+  midlewareOfAddToCart = (idOfProduct) => {
+    this.setState(({
+      allQuantityOfItems: getItemQuantity() + 1,
+    }), () => {
+      const { allQuantityOfItems } = this.state;
+      plussItemCartQuantity(allQuantityOfItems);
+    });
+    this.addToCart(idOfProduct);
   }
 
   addToCart = async (idOfProduct) => {
@@ -48,7 +66,9 @@ class App extends React.Component {
 
   createNewItem = (product) => {
     const addQuantityKey = { ...product, quantity: 1 };
-    this.setState((prevState) => ({ cartItem: [...prevState.cartItem, addQuantityKey] }));
+    this.setState((prevState) => ({
+      cartItem: [...prevState.cartItem, addQuantityKey],
+    }));
   }
 
   message = () => {
@@ -58,12 +78,21 @@ class App extends React.Component {
   }
 
   render() {
-    const { cartItem } = this.state;
+    const { cartItem, allQuantityOfItems } = this.state;
     return (
       <BrowserRouter>
-        <LinkCart />
+        <LinkCart
+          allQuantityOfItems={ allQuantityOfItems }
+          cartItem={ cartItem }
+        />
         <Switch>
-          <Route exact path="/" render={ () => <Home addToCart={ this.addToCart } /> } />
+          <Route
+            exact
+            path="/"
+            render={ () => (<Home
+              addToCart={ this.midlewareOfAddToCart }
+            />) }
+          />
           <Route
             exact
             path="/carrinho"
