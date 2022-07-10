@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import LinkCart from './Components/LinkCart/LinkCart';
 import Cart from './Pages/Cart/Cart';
+import FinishPayMount from './Pages/FinishPayMount/FinishPayMount';
 import Home from './Pages/Home/Home';
 import ProductDetails from './Pages/ProductDetails/ProductDetails';
 import { getProductDetails } from './services/api';
@@ -80,6 +81,15 @@ class App extends React.Component {
                 addToCart={ this.addToCart }
               />)
             }
+          />
+          <Route
+            exact
+            path="/checkout"
+            render={ () => (
+              <FinishPayMount
+                cartItem={ cartItem }
+              />
+            ) }
           />
         </Switch>
       </BrowserRouter>
