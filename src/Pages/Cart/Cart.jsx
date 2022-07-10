@@ -12,8 +12,10 @@ class Cart extends React.Component {
           data-testid="shopping-cart-empty-message"
         >
           { message() }
+
         </h1>
         {
+
           cartItem.map((produto) => (
             <CartItem
               quantity={ produto.quantity }
@@ -23,6 +25,8 @@ class Cart extends React.Component {
             />
           ))
         }
+
+        {/* req 12 */}
         <Link
           data-testid="checkout-products"
           to="/checkout"

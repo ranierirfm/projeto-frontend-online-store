@@ -1,4 +1,5 @@
 import React from 'react';
+import propTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class LinkCart extends React.Component {
@@ -22,5 +23,9 @@ class LinkCart extends React.Component {
     );
   }
 }
+
+LinkCart.propTypes = {
+  allQuantityOfItems: propTypes.func.isRequired,
+};
 
 export default LinkCart;

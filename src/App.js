@@ -6,21 +6,31 @@ import FinishPayMount from './Pages/FinishPayMount/FinishPayMount';
 import Home from './Pages/Home/Home';
 import ProductDetails from './Pages/ProductDetails/ProductDetails';
 import { getProductDetails } from './services/api';
+import { getItemQuantity, plussItemCartQuantity } from './services/cartStorage';
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       cartItem: [],
-      allQuantityOfItems: 0,
+      allQuantityOfItems: 4,
     };
   }
 
   // requisito 13
-  sumAllItems = () => {
-    const { cartItem } = this.state;
-    const sumAll = cartItem.reduce((acc, product) => acc + product.quantity, 0);
-    this.setState({ allQuantityOfItems: sumAll });
+  componentDidMount() {
+    this.setState({ allQuantityOfItems: !getItemQuantity() ? 0 : getItemQuantity() });
+  }
+
+  // requisito 13
+  midlewareOfAddToCart = (idOfProduct) => {
+    this.setState(({
+      allQuantityOfItems: getItemQuantity() + 1,
+    }), () => {
+      const { allQuantityOfItems } = this.state;
+      plussItemCartQuantity(allQuantityOfItems);
+    });
+    this.addToCart(idOfProduct);
   }
 
   addToCart = async (idOfProduct) => {
@@ -40,9 +50,7 @@ class App extends React.Component {
     const itemQuantity = cartItem[indexOfItem].quantity;
     const cloneOfCartItem = cartItem;
     cloneOfCartItem[indexOfItem] = this.fotmatAndPlusQuantity(indexOfItem, itemQuantity);
-    this.setState({ cartItem: cloneOfCartItem }, () => {
-      this.sumAllItems();
-    });
+    this.setState({ cartItem: cloneOfCartItem });
   }
 
   fetchItemIndex = (product) => {
@@ -60,9 +68,7 @@ class App extends React.Component {
     const addQuantityKey = { ...product, quantity: 1 };
     this.setState((prevState) => ({
       cartItem: [...prevState.cartItem, addQuantityKey],
-    }), () => {
-      this.sumAllItems();
-    });
+    }));
   }
 
   message = () => {
@@ -80,7 +86,13 @@ class App extends React.Component {
           cartItem={ cartItem }
         />
         <Switch>
-          <Route exact path="/" render={ () => <Home addToCart={ this.addToCart } /> } />
+          <Route
+            exact
+            path="/"
+            render={ () => (<Home
+              addToCart={ this.midlewareOfAddToCart }
+            />) }
+          />
           <Route
             exact
             path="/carrinho"

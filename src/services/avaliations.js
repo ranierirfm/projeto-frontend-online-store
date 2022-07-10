@@ -1,3 +1,5 @@
+// RESPONSAVEIS POR GERENCIAR AS AVALIZAÇÕES // REQ10
+
 const KEY_STORAGE_NAME = 'AVALIATION';
 
 const getAllAvaliation = async () => JSON.parse(localStorage.getItem(KEY_STORAGE_NAME));
