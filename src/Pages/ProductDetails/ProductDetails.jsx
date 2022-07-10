@@ -2,6 +2,7 @@ import React from 'react';
 import propTypes from 'prop-types';
 import Specifications from '../../Components/Specifications/Specifications';
 import { getProductDetails } from '../../services/api';
+import AvaliationForm from '../../Components/AvaliationForm/AvaliationForm';
 
 class ProductDetails extends React.Component {
   constructor() {
@@ -49,6 +50,7 @@ class ProductDetails extends React.Component {
         >
           Adicionar ao carrinho
         </button>
+        <AvaliationForm />
       </section>
     );
   }
