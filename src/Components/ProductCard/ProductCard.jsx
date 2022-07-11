@@ -18,6 +18,15 @@ class ProductCard extends React.Component {
                     data-testid="product"
                     key={ produto.id }
                   >
+                    {
+                      produto.shipping.free_shipping && (
+                        <h4
+                          data-testid="free-shipping"
+                        >
+                          Frete gratis
+                        </h4>
+                      )
+                    }
                     <Link
                       data-testid="product-detail-link"
                       to={ `productDetails/${produto.id}` }
@@ -51,6 +60,7 @@ class ProductCard extends React.Component {
 
 ProductCard.propTypes = {
   products: propTypes.arrayOf(propTypes.shape({
+    free_shipping: propTypes.bool.isRequired,
   })).isRequired,
   addToCart: propTypes.func.isRequired,
 };

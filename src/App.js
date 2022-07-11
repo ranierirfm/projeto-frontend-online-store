@@ -13,7 +13,7 @@ class App extends React.Component {
     super();
     this.state = {
       cartItem: [],
-      allQuantityOfItems: 4,
+      allQuantityOfItems: 1,
     };
   }
 
@@ -107,7 +107,7 @@ class App extends React.Component {
             render={
               (props) => (<ProductDetails
                 { ...props }
-                addToCart={ this.addToCart }
+                addToCart={ this.midlewareOfAddToCart }
               />)
             }
           />
