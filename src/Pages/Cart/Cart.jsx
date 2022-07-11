@@ -6,6 +6,7 @@ import CartItem from '../../Components/CartItem/CartItem';
 class Cart extends React.Component {
   render() {
     const { cartItem, message, addToCart, removeToCart } = this.props;
+    console.log(cartItem[0]);
     return (
       <section>
         <h1
@@ -25,6 +26,7 @@ class Cart extends React.Component {
               addToCart={ addToCart }
               productObj={ produto }
               removeToCart={ removeToCart }
+              availableQuantity={ produto.available_quantity }
             />
           ))
         }

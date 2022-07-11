@@ -2,8 +2,14 @@ import React from 'react';
 import propTypes from 'prop-types';
 
 class CartItem extends React.Component {
+  midlewareOfAddToCart = (productObj) => {
+    const { addToCart, quantity } = this.props;
+    if (quantity >= productObj.available_quantity) return;
+    addToCart(productObj);
+  }
+
   render() {
-    const { title, price, quantity, addToCart, productObj, removeToCart } = this.props;
+    const { title, price, quantity, productObj, removeToCart } = this.props;
     return (
       <div>
         <h4 data-testid="shopping-cart-product-name">{ title }</h4>
@@ -23,7 +29,7 @@ class CartItem extends React.Component {
         </span>
         <button
           data-testid="product-increase-quantity"
-          onClick={ () => addToCart(productObj) }
+          onClick={ () => this.midlewareOfAddToCart(productObj) }
           type="button"
         >
           +

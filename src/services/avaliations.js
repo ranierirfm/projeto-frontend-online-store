@@ -6,7 +6,6 @@ const getAllAvaliation = async () => JSON.parse(localStorage.getItem(KEY_STORAGE
 
 export const addAvaliation = async (avaliation) => {
   const arrayOfAvaliation = await getAllAvaliation();
-  console.log(arrayOfAvaliation);
   const includeNewAvaliation = [...arrayOfAvaliation, avaliation];
   await localStorage.setItem(KEY_STORAGE_NAME, JSON.stringify(includeNewAvaliation));
 };

@@ -3,8 +3,12 @@ import propTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class ProductCard extends React.Component {
+  componentDidMount() {
+  }
+
   render() {
     const { products, addToCart } = this.props;
+    console.log(products);
     return (
       <section>
         {
