@@ -5,7 +5,6 @@ import Cart from './Pages/Cart/Cart';
 import FinishPayMount from './Pages/FinishPayMount/FinishPayMount';
 import Home from './Pages/Home/Home';
 import ProductDetails from './Pages/ProductDetails/ProductDetails';
-import { getProductDetails } from './services/api';
 import { getItemQuantity, plussItemCartQuantity } from './services/cartStorage';
 
 class App extends React.Component {

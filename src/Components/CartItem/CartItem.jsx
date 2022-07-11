@@ -39,6 +39,7 @@ CartItem.propTypes = {
   quantity: propTypes.number.isRequired,
   addToCart: propTypes.func.isRequired,
   productObj: propTypes.arrayOf(propTypes.shape({})).isRequired,
+  removeToCart: propTypes.func.isRequired,
 };
 
 export default CartItem;
