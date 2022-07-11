@@ -4,7 +4,6 @@ import propTypes from 'prop-types';
 export default class FinishedForm extends Component {
   render() {
     const { handleFormChange, formData } = this.props;
-    console.log(formData);
     return (
       <section>
         <form>
