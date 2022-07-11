@@ -41,7 +41,7 @@ class ProductCard extends React.Component {
                     </span>
                     <button
                       type="button"
-                      onClick={ () => addToCart(produto.id) }
+                      onClick={ () => addToCart(produto) }
                       data-testid="product-add-to-cart"
                       name="addToCart"
                     >

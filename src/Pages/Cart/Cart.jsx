@@ -5,7 +5,7 @@ import CartItem from '../../Components/CartItem/CartItem';
 
 class Cart extends React.Component {
   render() {
-    const { cartItem, message } = this.props;
+    const { cartItem, message, addToCart, removeToCart } = this.props;
     return (
       <section>
         <h1
@@ -22,6 +22,9 @@ class Cart extends React.Component {
               key={ produto.id }
               title={ produto.title }
               price={ produto.price }
+              addToCart={ addToCart }
+              productObj={ produto }
+              removeToCart={ removeToCart }
             />
           ))
         }
@@ -43,6 +46,8 @@ class Cart extends React.Component {
 Cart.propTypes = {
   cartItem: propTypes.arrayOf(propTypes.shape({})).isRequired,
   message: propTypes.func.isRequired,
+  addToCart: propTypes.func.isRequired,
+  removeToCart: propTypes.func.isRequired,
 };
 
 export default Cart;
