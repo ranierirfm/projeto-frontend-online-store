@@ -5,7 +5,6 @@ import Cart from './Pages/Cart/Cart';
 import FinishPayMount from './Pages/FinishPayMount/FinishPayMount';
 import Home from './Pages/Home/Home';
 import ProductDetails from './Pages/ProductDetails/ProductDetails';
-import { getProductDetails } from './services/api';
 import { getItemQuantity, plussItemCartQuantity } from './services/cartStorage';
 
 class App extends React.Component {
@@ -23,18 +22,17 @@ class App extends React.Component {
   }
 
   // requisito 13
-  midlewareOfAddToCart = (idOfProduct) => {
+  midlewareOfAddToCart = (product) => {
     this.setState(({
       allQuantityOfItems: getItemQuantity() + 1,
     }), () => {
       const { allQuantityOfItems } = this.state;
       plussItemCartQuantity(allQuantityOfItems);
     });
-    this.addToCart(idOfProduct);
+    this.addToCart(product);
   }
 
-  addToCart = async (idOfProduct) => {
-    const product = await getProductDetails(idOfProduct);
+  addToCart = async (product) => {
     if (this.itemExist(product)) return this.plusItemQuantity(product);
     this.createNewItem(product);
   }
@@ -53,11 +51,6 @@ class App extends React.Component {
     this.setState({ cartItem: cloneOfCartItem });
   }
 
-  fetchItemIndex = (product) => {
-    const { cartItem } = this.state;
-    return cartItem.findIndex((item) => item.id === product.id);
-  }
-
   fotmatAndPlusQuantity = (indexOfItem) => {
     const { cartItem } = this.state;
     const itemQuantity = cartItem[indexOfItem].quantity;
@@ -69,6 +62,40 @@ class App extends React.Component {
     this.setState((prevState) => ({
       cartItem: [...prevState.cartItem, addQuantityKey],
     }));
+  }
+
+  itemQuantity = (product) => {
+    console.log(product);
+    const { cartItem } = this.state;
+    return cartItem[this.fetchItemIndex(product)].quantity;
+  }
+
+  removeToCart = (product) => {
+    if (this.quantityIsZero(product) === 1) return;
+    this.decreaseQuantity(product);
+  }
+
+  quantityIsZero = (product) => this.itemQuantity(product);
+
+  removeItem = (product) => {
+    const { cartItem } = this.state;
+    const filtedCartItem = cartItem.filter((produto) => produto.id !== product.id);
+    this.setState({ cartItem: filtedCartItem });
+  }
+
+  decreaseQuantity = (product) => {
+    const { cartItem } = this.state;
+    const indexOfItem = this.fetchItemIndex(product);
+    const cloneOfCartItem = cartItem;
+    cloneOfCartItem[indexOfItem].quantity = this.itemQuantity(product) - 1;
+    this.setState({ cartItem: cloneOfCartItem }, () => {
+      if (!this.quantityIsZero(product)) return this.removeItem(product);
+    });
+  }
+
+  fetchItemIndex = (product) => {
+    const { cartItem } = this.state;
+    return cartItem.findIndex((item) => item.id === product.id);
   }
 
   message = () => {
@@ -99,6 +126,8 @@ class App extends React.Component {
             render={ () => (<Cart
               message={ this.message }
               cartItem={ cartItem }
+              addToCart={ this.midlewareOfAddToCart }
+              removeToCart={ this.removeToCart }
             />) }
           />
           <Route
