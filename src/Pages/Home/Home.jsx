@@ -3,6 +3,7 @@ import propTypes from 'prop-types';
 import CategoryList from '../../Components/CategoryList/CategoryList';
 import ProductCard from '../../Components/ProductCard/ProductCard';
 import { getProductsFromCategoryAndQuery } from '../../services/api';
+import Loading from '../../Components/Loading/Loading';
 
 class Home extends React.Component {
   constructor() {
@@ -70,7 +71,7 @@ class Home extends React.Component {
         <CategoryList filterCategory={ this.filterCategory } />
         {
           loadingFetchProducts ? (
-            <h1>Carregando....</h1>
+            <Loading />
           ) : (
             <ProductCard products={ productList } addToCart={ addToCart } />
           )

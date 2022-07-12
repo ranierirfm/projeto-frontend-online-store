@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { getCategories } from '../../services/api';
+import Loading from '../Loading/Loading';
 
 class CategoryList extends Component {
   constructor() {
@@ -24,7 +25,7 @@ class CategoryList extends Component {
 
     if (isLoading) {
       return (
-        <h1>Carregando...</h1>
+        <Loading />
       );
     }
 

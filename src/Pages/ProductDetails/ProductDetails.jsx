@@ -4,16 +4,16 @@ import Specifications from '../../Components/Specifications/Specifications';
 import { getProductDetails } from '../../services/api';
 import AvaliationForm from '../../Components/AvaliationForm/AvaliationForm';
 import {
-  addAvaliation,
-  addFirsAvaliation,
-  avaliationVerificationExist,
+  addAvaliationInStore,
+  addFirsAvaliationInStore,
+  avaliationExist,
   getAvaliationById,
 } from '../../services/avaliations';
+import Loading from '../../Components/Loading/Loading';
 
 class ProductDetails extends React.Component {
   constructor() {
     super();
-
     this.state = {
       product: [],
       isLoading: true,
@@ -27,9 +27,13 @@ class ProductDetails extends React.Component {
 
   async componentDidMount() {
     this.setState({ isLoading: true, loadingAvaliations: true });
+    this.fetchAllAvaliationsOfProduct();
+    this.fetchProductDetail();
+  }
+
+  fetchProductDetail = async () => {
     const { match } = this.props;
     const { params } = match;
-    this.fetchAllAvaliationsOfProduct();
     const fetchProduct = await getProductDetails(params.id);
     this.setState({ product: fetchProduct, isLoading: false });
   }
@@ -37,34 +41,37 @@ class ProductDetails extends React.Component {
   fetchAllAvaliationsOfProduct = async () => {
     const { match } = this.props;
     const { params } = match;
-    if (!await avaliationVerificationExist()) {
-      this.setState({ loadingAvaliations: false });
-      return;
-    }
+    if (!await avaliationExist()) return this.setState({ loadingAvaliations: false });
     const avaliations = await getAvaliationById(params.id);
     this.setState({ allAvaliationsOfItem: avaliations, loadingAvaliations: false });
   }
 
-  addVerificationInStorage = async () => {
+  addAvaliationInStorage = async () => {
     this.setState({ loadingAvaliations: true });
-    const { match } = this.props;
-    const { params } = match;
-    const { email, stars, messageAvaliation } = this.state;
-    const objeOfAvaliation = {
-      email,
-      stars,
-      messageAvaliation,
-      idOfProduct: params.id,
-    };
-    if (!await avaliationVerificationExist()) {
-      await addFirsAvaliation(objeOfAvaliation);
-      this.fetchAllAvaliationsOfProduct();
-      this.clearFormAvaliation();
-      return;
-    }
-    await addAvaliation(objeOfAvaliation);
+    if (!await avaliationExist()) return this.addFistAvaliation();
+    this.addAvaliation();
+  }
+
+  addAvaliation = () => {
+    addAvaliationInStore(this.objOfAvaliation());
     this.fetchAllAvaliationsOfProduct();
     this.clearFormAvaliation();
+  }
+
+  addFistAvaliation = () => {
+    const { email, stars, messageAvaliation } = this.state;
+    addFirsAvaliationInStore(this.objOfAvaliation({ email, stars, messageAvaliation }));
+    this.fetchAllAvaliationsOfProduct();
+    this.clearFormAvaliation();
+  }
+
+  objOfAvaliation = (dataOfAvaliation) => {
+    const { match } = this.props;
+    const { params } = match;
+    return {
+      ...dataOfAvaliation,
+      idOfProduct: params.id,
+    };
   }
 
   clearFormAvaliation = () => {
@@ -93,7 +100,7 @@ class ProductDetails extends React.Component {
 
     if (isLoading) {
       return (
-        <h1>Carregando...</h1>
+        <Loading />
       );
     }
 
@@ -116,7 +123,7 @@ class ProductDetails extends React.Component {
           Adicionar ao carrinho
         </button>
         <AvaliationForm
-          addVerificationInStorage={ this.addVerificationInStorage }
+          addVerificationInStorage={ this.addAvaliationInStorage }
           messageAvaliation={ messageAvaliation }
           email={ email }
           handleAvaliation={ this.handleAvaliation }
@@ -124,7 +131,7 @@ class ProductDetails extends React.Component {
         />
         {
           loadingAvaliations ? (
-            <h1>Carregando...</h1>
+            <Loading />
           ) : (
             <section>
               {

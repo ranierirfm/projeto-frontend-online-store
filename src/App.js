@@ -5,7 +5,7 @@ import Cart from './Pages/Cart/Cart';
 import FinishPayMount from './Pages/FinishPayMount/FinishPayMount';
 import Home from './Pages/Home/Home';
 import ProductDetails from './Pages/ProductDetails/ProductDetails';
-import { getItemQuantity, plussItemCartQuantity } from './services/cartStorage';
+import { getItemQuantity, plussItemCartQuantityInStore } from './services/cartStorage';
 
 class App extends React.Component {
   constructor() {
@@ -16,20 +16,20 @@ class App extends React.Component {
     };
   }
 
-  // requisito 13
   componentDidMount() {
     this.setState({ allQuantityOfItems: !getItemQuantity() ? 0 : getItemQuantity() });
   }
 
-  // requisito 13
-  midlewareOfAddToCart = (product) => {
-    this.setState(({
-      allQuantityOfItems: getItemQuantity() + 1,
-    }), () => {
-      const { allQuantityOfItems } = this.state;
-      plussItemCartQuantity(allQuantityOfItems);
+  plusAllQuantityInCart = (product) => {
+    this.setState(({ allQuantityOfItems: getItemQuantity() + 1 }), () => {
+      this.updateStoreCart();
+      this.addToCart(product);
     });
-    this.addToCart(product);
+  }
+
+  updateStoreCart = () => {
+    const { allQuantityOfItems } = this.state;
+    plussItemCartQuantityInStore(allQuantityOfItems);
   }
 
   addToCart = async (product) => {
@@ -45,16 +45,9 @@ class App extends React.Component {
   plusItemQuantity = (product) => {
     const { cartItem } = this.state;
     const indexOfItem = this.fetchItemIndex(product);
-    const itemQuantity = cartItem[indexOfItem].quantity;
     const cloneOfCartItem = cartItem;
-    cloneOfCartItem[indexOfItem] = this.fotmatAndPlusQuantity(indexOfItem, itemQuantity);
+    cloneOfCartItem[indexOfItem] = this.fotmatAndPlusQuantity(indexOfItem);
     this.setState({ cartItem: cloneOfCartItem });
-  }
-
-  fotmatAndPlusQuantity = (indexOfItem) => {
-    const { cartItem } = this.state;
-    const itemQuantity = cartItem[indexOfItem].quantity;
-    return { ...cartItem[indexOfItem], quantity: itemQuantity + 1 };
   }
 
   createNewItem = (product) => {
@@ -64,6 +57,12 @@ class App extends React.Component {
     }));
   }
 
+  fotmatAndPlusQuantity = (indexOfItem) => {
+    const { cartItem } = this.state;
+    const itemQuantity = cartItem[indexOfItem].quantity;
+    return { ...cartItem[indexOfItem], quantity: itemQuantity + 1 };
+  }
+
   itemQuantity = (product) => {
     console.log(product);
     const { cartItem } = this.state;
@@ -71,11 +70,11 @@ class App extends React.Component {
   }
 
   removeToCart = (product) => {
-    if (this.quantityIsZero(product) === 1) return;
+    if (this.quantityIsOne(product) === 1) return;
     this.decreaseQuantity(product);
   }
 
-  quantityIsZero = (product) => this.itemQuantity(product);
+  quantityIsOne = (product) => this.itemQuantity(product);
 
   removeItem = (product) => {
     const { cartItem } = this.state;
@@ -89,7 +88,7 @@ class App extends React.Component {
     const cloneOfCartItem = cartItem;
     cloneOfCartItem[indexOfItem].quantity = this.itemQuantity(product) - 1;
     this.setState({ cartItem: cloneOfCartItem }, () => {
-      if (!this.quantityIsZero(product)) return this.removeItem(product);
+      if (!this.quantityIsOne(product)) return this.removeItem(product);
     });
   }
 
@@ -117,7 +116,7 @@ class App extends React.Component {
             exact
             path="/"
             render={ () => (<Home
-              addToCart={ this.midlewareOfAddToCart }
+              addToCart={ this.plusAllQuantityInCart }
             />) }
           />
           <Route
@@ -126,7 +125,7 @@ class App extends React.Component {
             render={ () => (<Cart
               message={ this.message }
               cartItem={ cartItem }
-              addToCart={ this.midlewareOfAddToCart }
+              addToCart={ this.plusAllQuantityInCart }
               removeToCart={ this.removeToCart }
             />) }
           />
@@ -136,7 +135,7 @@ class App extends React.Component {
             render={
               (props) => (<ProductDetails
                 { ...props }
-                addToCart={ this.midlewareOfAddToCart }
+                addToCart={ this.plusAllQuantityInCart }
               />)
             }
           />

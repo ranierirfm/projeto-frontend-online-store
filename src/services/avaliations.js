@@ -4,7 +4,7 @@ const KEY_STORAGE_NAME = 'AVALIATION';
 
 const getAllAvaliation = async () => JSON.parse(localStorage.getItem(KEY_STORAGE_NAME));
 
-export const addAvaliation = async (avaliation) => {
+export const addAvaliationInStore = async (avaliation) => {
   const arrayOfAvaliation = await getAllAvaliation();
   const includeNewAvaliation = [...arrayOfAvaliation, avaliation];
   await localStorage.setItem(KEY_STORAGE_NAME, JSON.stringify(includeNewAvaliation));
@@ -16,9 +16,9 @@ export const getAvaliationById = async (idOfProduct) => {
   return filtedArray;
 };
 
-export const avaliationVerificationExist = async () => getAllAvaliation();
+export const avaliationExist = async () => getAllAvaliation();
 
-export const addFirsAvaliation = async (avaliation) => {
+export const addFirsAvaliationInStore = async (avaliation) => {
   const arrayOfAvaliation = [avaliation];
   await localStorage.setItem(KEY_STORAGE_NAME, JSON.stringify(arrayOfAvaliation));
 };

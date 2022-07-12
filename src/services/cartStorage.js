@@ -2,7 +2,7 @@
 
 const KEY_STORAGE_CARD = 'KEY_STORAGE_CARD';
 
-export const plussItemCartQuantity = (quantity) => {
+export const plussItemCartQuantityInStore = (quantity) => {
   localStorage.setItem(KEY_STORAGE_CARD, JSON.stringify(quantity));
 };
 
