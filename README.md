@@ -2,7 +2,7 @@
 
 # Projeto Front-End Online Store!
 Aplicação de Loja Online feita com React.
-> [Acessar página do projeto](https://xxxxxxxxxx.github.io/Projeto-xxxxxxxxxx/)
+<!-- > [Acessar página do projeto](https://xxxxxxxxxx.github.io/Projeto-xxxxxxxxxx/) -->
 
 ## 💻 Projeto
 
